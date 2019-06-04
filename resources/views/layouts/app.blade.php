@@ -67,10 +67,10 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('documents.index') }}">{{ __('List') }}</a>
+                                <a class="nav-link" href="{{ route('uploads.index') }}">{{ __('List') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('documents.create') }}">{{ __('Create') }}</a>
+                                <a class="nav-link" href="{{ route('uploads.create') }}">{{ __('Create') }}</a>
                             </li>
                         @endguest
                     </ul>

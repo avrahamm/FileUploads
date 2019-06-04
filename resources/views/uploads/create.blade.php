@@ -32,14 +32,9 @@
                     @endif
 
 
-                    <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('uploads.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="fileTitle" class="col-md-4 col-form-label">Title</label>
-                            <div class="col-md-6">
-                                <input id="fileTitle" type="text" class="form-control" name="fileTitle" value="" required>
-                            </div>
-
                             <label for="fileToUpload" class="col-md-4 col-form-label ">File To Upload</label>
                             <div class="col-md-6">
                                 <input type="file" class="form-control-file" name="fileToUpload" id="fileToUpload" aria-describedby="fileHelp">

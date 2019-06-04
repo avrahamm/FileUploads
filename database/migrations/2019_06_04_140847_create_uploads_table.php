@@ -19,6 +19,8 @@ class CreateUploadsTable extends Migration
             $table->string('name');
             $table->longText('data');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

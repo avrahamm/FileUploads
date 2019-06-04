@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Document;
+use App\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class DocumentController extends Controller
+class UploadController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -32,7 +32,7 @@ class DocumentController extends Controller
             echo $decryptedContent;
         }, 'file.jpg');
         //
-//        return view("documents.index");
+//        return view("uploads.index");
     }
 
     /**
@@ -43,7 +43,7 @@ class DocumentController extends Controller
     public function create()
     {
 //        return "Create Document Form";
-        return view("documents.create");
+        return view("uploads.create");
     }
 
     /**
@@ -66,7 +66,7 @@ class DocumentController extends Controller
 
         return back()
             ->with('success','You have successfully uploaded.');
-//        return redirect("/documents/create");
+//        return redirect("/uploads/create");
     }
 
     public function store(Request $request)
@@ -93,15 +93,13 @@ class DocumentController extends Controller
     }
 
 
-    //==============================
-
     /**
      * Display the specified resource.
      *
-     * @param  \App\Document  $document
+     * @param  \App\Upload  $upload
      * @return \Illuminate\Http\Response
      */
-    public function show(Document $document)
+    public function show(Upload $upload)
     {
         //
     }
@@ -109,10 +107,10 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Document  $document
+     * @param  \App\Upload  $upload
      * @return \Illuminate\Http\Response
      */
-    public function edit(Document $document)
+    public function edit(Upload $upload)
     {
         //
     }
@@ -121,10 +119,10 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Document  $document
+     * @param  \App\Upload  $upload
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Document $document)
+    public function update(Request $request, Upload $upload)
     {
         //
     }
@@ -132,10 +130,10 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Document  $document
+     * @param  \App\Upload  $upload
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Document $document)
+    public function destroy(Upload $upload)
     {
         //
     }
