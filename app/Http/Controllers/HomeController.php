@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+// TODO! Delete safely
 class HomeController extends Controller
 {
     /**

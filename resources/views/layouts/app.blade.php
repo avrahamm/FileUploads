@@ -66,6 +66,12 @@
                                     </form>
                                 </div>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('documents.index') }}">{{ __('List') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('documents.create') }}">{{ __('Create') }}</a>
+                            </li>
                         @endguest
                     </ul>
                 </div>
