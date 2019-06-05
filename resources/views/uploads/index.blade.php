@@ -12,6 +12,17 @@
                         <a href="{{ route('uploads.create') }}" class="btn btn-primary">Add new upload</a>
                         <br /><br />
 
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> Download Failed!<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <table class="table">
                             <tr>
                                 <th>File Name</th>
@@ -20,7 +31,7 @@
                             @forelse ($userUploads as $upload)
                                 <tr>
                                     <td>{{ $upload->name }}</td>
-                                    <td><a href="{{ route('uploads.download', $upload->uuid) }}">{{ $upload->name }}</a></td>
+                                    <td><a href="{{ route('uploads.download', [$upload->uuid,$upload->name]) }}">{{ $upload->name }}</a></td>
                                 </tr>
                             @empty
                                 <tr>

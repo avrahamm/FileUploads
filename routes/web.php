@@ -11,11 +11,13 @@
 |
 */
 
+// Laravel out of the box authentication routes.
 Auth::routes();
 
 Route::get('/', 'UploadController@create')->name('root');
 Route::get('/home', 'UploadController@create')->name('home');
 
-Route::resource('uploads', 'UploadController');
-Route::get('uploads/{uuid}/download', 'UploadController@download')->name('uploads.download');
+// Setting relevant uploads routes.
+Route::resource('uploads', 'UploadController')->except(['show','edit','update','destroy']);
+Route::get('uploads/{uuid}/download/{targetName}', 'UploadController@download')->name('uploads.download');
 
