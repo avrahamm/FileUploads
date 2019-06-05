@@ -31,6 +31,8 @@ DB_DATABASE=ewave  </br>
 DB_USERNAME=avraham  </br>
 DB_PASSWORD=123456  </br>
 
+Optionally, you can replace APP_NAME=Uploads </br>
+
 I worked on Windows with XAMP, and configured virtual host - you can make your choise.  </br>
 
 ## Description:
