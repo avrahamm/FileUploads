@@ -20,4 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('uploads', 'UploadController');
+Route::get('uploads/{uuid}/download', 'UploadController@download')->name('uploads.download');
 

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Upload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Faker\Provider\Uuid as FakerUuid;
 
 class UploadController extends Controller
 {
@@ -25,14 +26,9 @@ class UploadController extends Controller
      */
     public function index()
     {
-        $encryptedContent = Storage::get('file.dat');
-        $decryptedContent = decrypt($encryptedContent);
-
-        return response()->streamDownload(function() use ($decryptedContent) {
-            echo $decryptedContent;
-        }, 'file.jpg');
-        //
-//        return view("uploads.index");
+        $user = Auth::user();
+        $userUploads = $user->uploads()->get(['uuid','name']);
+        return view('uploads.index')->with('userUploads', $userUploads);
     }
 
     /**
@@ -42,56 +38,51 @@ class UploadController extends Controller
      */
     public function create()
     {
-//        return "Create Document Form";
         return view("uploads.create");
     }
 
     /**
-     * TODO! delete
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * uuid is generated so when building downloading link,
+     * uuid will be used and not id.
+     * So the real id is not guessable and more secure.
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function storev1(Request $request)
-    {
-        $request->validate([
-            'fileToUpload' => 'required|file|max:1024',
-        ]);
-//@link:https://laracasts.com/discuss/channels/laravel/how-to-get-uploaded-file-name-in-laravel-53
-//        $request->fileToUpload->store('logos');
-        $fileName = request()->fileToUpload->getClientOriginalName();
-//        $fileName .= $fileName.time().'.'.request()->fileToUpload->getClientOriginalExtension();
-        $request->fileToUpload->storeAs('logos',$fileName);
-
-        return back()
-            ->with('success','You have successfully uploaded.');
-//        return redirect("/uploads/create");
-    }
-
     public function store(Request $request)
     {
         $request->validate([
-            'fileToUpload' => 'required|file|max:1024',
+            'fileToUpload' => 'required|file|max:1024|mimes:pdf,doc,docx,jpeg,jpg,png,gif',
         ]);
-        $file = $request->fileToUpload;
 
-        // Get File Content
-        $fileContent = $file->get();
-
-        // Encrypt the Content
-        $encryptedContent = encrypt($fileContent);
-        $fileName = request()->fileToUpload->getClientOriginalName();
-        $fileName .= ".dat";
-//        $fileName .= $fileName.time().'.'.request()->fileToUpload->getClientOriginalExtension();
-
-        // Store the encrypted Content
-        Storage::put($fileName, $encryptedContent);
-
+        $uploadedFile = $request->fileToUpload;
+        $upload = new Upload;
+        $upload->create([
+            'user_id' => Auth::id(),
+            'uuid' => FakerUuid::uuid(),
+            'name' => $uploadedFile->getClientOriginalName(),
+            'data' => $uploadedFile->get()
+        ]);
         return back()
-            ->with('success','You have successfully uploaded.');
+            ->with('success','successfully uploaded.');
     }
 
+    /**
+     * When download link is clicked, comes here and
+     * a browser is forced to download file.
+     * The filed is searched among current user files by $uuid parameter.
+     * @param $uuid
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function download($uuid)
+    {
+        $user = Auth::user();
+        $targetUpload = $user->uploads()->where('uuid',$uuid)->FirstOrFail();
+        $fileName = $targetUpload->name;
+        $decryptedContent = $targetUpload->data;
+        return response()->streamDownload(function() use ($decryptedContent, $fileName) {
+            echo $decryptedContent;
+        }, $fileName);
+    }
 
     /**
      * Display the specified resource.
@@ -101,7 +92,7 @@ class UploadController extends Controller
      */
     public function show(Upload $upload)
     {
-        //
+        return redirect(route("uploads.create"));
     }
 
     /**
@@ -112,7 +103,7 @@ class UploadController extends Controller
      */
     public function edit(Upload $upload)
     {
-        //
+        return redirect(route("uploads.create"));
     }
 
     /**
@@ -124,7 +115,7 @@ class UploadController extends Controller
      */
     public function update(Request $request, Upload $upload)
     {
-        //
+        return redirect(route("uploads.create"));
     }
 
     /**
@@ -135,6 +126,6 @@ class UploadController extends Controller
      */
     public function destroy(Upload $upload)
     {
-        //
+        return redirect(route("uploads.create"));
     }
 }
