@@ -14,7 +14,7 @@
 
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
-                                <strong>Whoops!</strong> Download Failed!<br><br>
+                                <strong>Whoops!</strong> Download Failed! Probably file doesn't exist.<br><br>
                                 <ul>
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>

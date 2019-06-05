@@ -25,7 +25,10 @@
 
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <strong>Whoops!</strong> There were some problems with your input.<br>
+                            File Name may contain latin alphanumeric chars and dots only without spaces!<br>
+                            Images and some document formats are permitted only!<br>
+                            <br>
                             <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>

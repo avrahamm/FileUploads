@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Faker\Provider\Uuid as FakerUuid;
+use  Illuminate\Validation\ValidationException;
+use  Illuminate\Database\QueryException;
 use Exception;
+//use Illuminate\Validation\Validator;
+use Validator;
 
 /**
  * Class UploadController manages uploads operations,
@@ -64,9 +68,9 @@ class UploadController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'fileToUpload' => 'required|file|max:1024|mimes:pdf,doc,docx,jpeg,jpg,png,gif',
-            ]);
+            $this->validateUploadedFile($request);
+            $request->request->add([ 'fileToUploadName' => $request->fileToUpload->getClientOriginalName()]);
+            $this->validatedFileName($request);
 
             $uploadedFile = $request->fileToUpload;
             $upload = new Upload;
@@ -77,20 +81,64 @@ class UploadController extends Controller
                 'data' => $uploadedFile->get()
             ]);
         }
-        catch( Exception $e){
+        catch( ValidationException $e){
             $fileName = "no file";
             if( $request->fileToUpload ) {
                 $fileName = $request->fileToUpload->getClientOriginalName();
             }
-
-            $logMessage = $this->getLogMessage($e->errors()['fileToUpload'][0],
-                $fileName);
+            $errorMessage = "Upload Failed";
+            foreach($e->errors() as $error ) {
+                $errorMessage =$error[0];
+            }
+            $logMessage = $this->getLogMessage($errorMessage,$fileName);
             Log::channel('uploads')->error($logMessage);
             return back()->withErrors($e->errors());
+        }
+        catch( QueryException $e) {
+            $fileName = "no file";
+            if( $request->fileToUpload ) {
+                $fileName = $request->fileToUpload->getClientOriginalName();
+            }
+            $logMessage = $this->getLogMessage("Upload Failed",
+                $fileName);
+            Log::channel('uploads')->error($logMessage);
+            return back()->withErrors(["$fileName name may contain illegal characters."."<br/>".
+                "Only alphanumerical characters are without spaces."."<br/>".
+                "Upload Failed!"]);
+        }
+        catch( Exception $e) {
+            $fileName = "no file";
+            if( $request->fileToUpload ) {
+                $fileName = $request->fileToUpload->getClientOriginalName();
+            }
+            $logMessage = $this->getLogMessage("Upload Failed",
+                $fileName);
+            Log::channel('uploads')->error($logMessage);
+            return back()->withErrors(['$fileName' => "Upload Failed"]);
         }
         // on success
         return back()
             ->with('success','successfully uploaded.');
+    }
+
+    public function validateUploadedFile($request){
+        $request->validate([
+            'fileToUpload' => [
+                'required',
+                'file',
+                'max:1024',
+                'mimes:pdf,doc,docx,jpeg,jpg,png,gif',
+            ]
+        ]);
+    }
+
+    public function validatedFileName($request) {
+        $request->validate([
+            'fileToUploadName' => [
+                'required',
+                'regex:/^[A-Za-z0-9_-]*.[A-Za-z]*$/'
+            ]
+        ]);
     }
 
     /**
@@ -121,7 +169,11 @@ class UploadController extends Controller
         try {
             $user = Auth::user();
             $targetUpload = $user->uploads()->where('uuid',$uuid)->FirstOrFail();
-            $fileName = $targetUpload->name; // should equal $targetName.
+            /**
+             * $targetName should equal $targetUpload->name,
+             * yet sanitizing could change before saved in DB.
+            **/
+            $fileName = $targetName;
             $decryptedContent = $targetUpload->data;
             return response()->streamDownload(function() use ($decryptedContent, $fileName) {
                 echo $decryptedContent;
