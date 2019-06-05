@@ -2,7 +2,7 @@
 
 There is a file uploads application.
 
-<b>Steps to reproduce</b>.
+<b>Steps to reproduce</b>. <br>
  git clone https://github.com/avrahamm/FileUploads.git
  <p>
  cd FilesUploads
