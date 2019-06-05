@@ -8,6 +8,9 @@
                 <div class="card-header">File Upload</div>
 
                 <div class="card-body">
+                    <a href="{{ route('uploads.index') }}" class="btn btn-primary">Uploads List</a>
+                    <br /><br />
+
                     @if ($message = Session::get('success'))
 
                         <div class="alert alert-success alert-block">

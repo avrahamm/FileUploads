@@ -11,13 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'UploadController@create')->name('root');
+Route::get('/home', 'UploadController@create')->name('home');
 
 Route::resource('uploads', 'UploadController');
 Route::get('uploads/{uuid}/download', 'UploadController@download')->name('uploads.download');
