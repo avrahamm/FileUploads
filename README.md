@@ -4,11 +4,22 @@ There is a file uploads application.
 
 <b>Steps to reproduce</b>.
  git clone https://github.com/avrahamm/FileUploads.git
+ <p>
  cd FilesUploads
+</p>
+<p>
  composer install
+</p>
+<p>
  cp .env.example .env
+</p>
+<p>
  php artisan key:generate
+</p>
+<p>
  php artisan migrate
+</p>
+<p>
  
  Create DB and priveleged user,
  Open .env file and set your DB credentials,
