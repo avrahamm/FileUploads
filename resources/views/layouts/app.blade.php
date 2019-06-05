@@ -70,7 +70,7 @@
                                 <a class="nav-link" href="{{ route('uploads.index') }}">{{ __('List') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('uploads.create') }}">{{ __('Create') }}</a>
+                                <a class="nav-link" href="{{ route('uploads.create') }}">{{ __('Upload') }}</a>
                             </li>
                         @endguest
                     </ul>
