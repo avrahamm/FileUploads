@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Upload;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Faker\Provider\Uuid as FakerUuid;
 use  Illuminate\Validation\ValidationException;
 use  Illuminate\Database\QueryException;
 use Exception;
-//use Illuminate\Validation\Validator;
-use Validator;
 
 /**
  * Class UploadController manages uploads operations,
@@ -65,7 +64,7 @@ class UploadController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         try {
             $this->validateUploadedFile($request);
@@ -121,7 +120,10 @@ class UploadController extends Controller
             ->with('success','successfully uploaded.');
     }
 
-    public function validateUploadedFile($request){
+    /**
+     * @param Request $request
+     */
+    public function validateUploadedFile(Request $request){
         $request->validate([
             'fileToUpload' => [
                 'required',
@@ -132,7 +134,10 @@ class UploadController extends Controller
         ]);
     }
 
-    public function validatedFileName($request) {
+    /**
+     * @param Request $request
+     */
+    public function validatedFileName(Request $request) {
         $request->validate([
             'fileToUploadName' => [
                 'required',

@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label for="fileToUpload" class="col-md-4 col-form-label ">File To Upload</label>
                             <div class="col-md-6">
-                                <input type="file" class="form-control-file" name="fileToUpload" id="fileToUpload" aria-describedby="fileHelp">
+                                <input required type="file" class="form-control-file" name="fileToUpload" id="fileToUpload" aria-describedby="fileHelp">
                                 <small id="fileHelp" class="form-text text-muted">Please upload a valid image file. Size of image should not be more than 1MB.</small>
                             </div>
                         </div>
