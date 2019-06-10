@@ -37,8 +37,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * To return ordered by uploads.created_at in descending order.
+     *  @link:https://stackoverflow.com/questions/25700529/laravel-eloquent-how-to-order-results-of-related-models
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function uploads()
     {
-        return $this->hasMany('App\Upload');
+        return $this->hasMany('App\Upload')->orderBy('created_at','desc');
     }
 }

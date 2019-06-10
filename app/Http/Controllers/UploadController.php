@@ -43,6 +43,7 @@ class UploadController extends Controller
     public function index()
     {
         $user = Auth::user();
+        // to get authenticated/logged in user uploads in descending order.
         $userUploads = $user->uploads()->get(['uuid','name']);
         return view('uploads.index')->with('userUploads', $userUploads);
     }
@@ -138,6 +139,7 @@ class UploadController extends Controller
      * @param Request $request
      */
     public function validatedFileName(Request $request) {
+        // @link: https://stackoverflow.com/questions/38807217/regex-for-validating-alpha-dash-and-exactly-one-dot-symbol
         $request->validate([
             'fileToUploadName' => [
                 'required',
